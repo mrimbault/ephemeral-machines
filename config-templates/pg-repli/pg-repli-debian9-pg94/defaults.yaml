@@ -1,0 +1,66 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Configuration shared between machines.
+defaults:
+  box:              "debian/stretch64"
+  box_check_update: false
+  memory:           1024
+  cpus:             1
+  # Network.
+  private_networks:
+    _listitem_122:
+      # Vagrant network auto-configure feature.
+      auto_config: true
+      local_domain:      "vagrant.local"
+  postgresql:
+    version: "9.4"
+    repo:    "pgdg"
+    repo_url:    "http://apt.postgresql.org/pub/repos/apt/"
+    repo_key:    "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    packages:
+    - "postgresql-9.4"
+    - "postgresql-contrib-9.4"
+    settings:
+      listen_addresses: "'*'"
+      # Logging.
+      log_connections:             "'on'"
+      log_disconnections:          "'on'"
+      log_checkpoints:             "'on'"
+      log_lock_waits:              "'on'"
+      log_temp_files:              0
+      log_autovacuum_min_duration: 0
+      log_line_prefix:             "'%t [%p]: db=%d,user=%u,app=%a,client=%h '"
+      lc_messages:                 "'C'"
+      # Replication.
+      wal_level:             "'hot_standby'"
+      archive_mode:          "'on'"
+      archive_command:       "'/bin/true'"
+      hot_standby:           "'on'"
+      max_wal_senders:       10
+    hba_lines:
+    # Replication specific lines are added from every machine
+    # configuration file.
+      # TYPE  DATABASE        USER            ADDRESS             METHOD
+    - "local   all        postgres                                  peer"
+    - "local   all             all                                   md5"
+    - "host    all             all       127.0.0.1/32                md5"
+    - "host    all             all            ::1/128                md5"
+    - "host    all             all   192.168.122.1/32                md5"
+    - "host    all             all  192.168.122.31/32                md5"
+    - "host    all             all  192.168.122.32/32                md5"
+    - "host    all             all  192.168.122.33/32                md5"
+    replication:
+      rolename: "repliuser"
+      # FIXME password will not work as intended when quoted
+      # see: https://github.com/ansible/ansible/issues/22868
+      password: xev8ER7cec
+  # Synced folders.
+  sync_folders:
+    _listitem_share:
+      host:  "share"
+      guest: "/share"
+

@@ -1,0 +1,20 @@
+---
+# FIXME should we allow to install multiple versions?
+- name: Add "pgdg" repository
+  become: true
+  script: scripts/system/add_repo_apt.sh -U \
+    -n "{{ vars['postgresql']['repo'] }}" \
+    -u "{{ vars['postgresql']['repo_url'] }}" \
+    -c "{{ ansible_distribution_release }}" \
+    -k "{{ vars['postgresql']['repo_key'] }}"
+- name: Install PostgreSQL
+  become: true
+  script: >
+    scripts/system/install_pkg_apt.sh \
+      "{{ vars['postgresql']['packages']|join(' ') }}"
+# FIXME configure "postgres" user .bashrc ...
+# - change prompt to show hostname, PGDATA, PGPORT, PGUSER
+# - change default EDITOR to vim and PAGER to less
+# - change .psqlrc (\timing, show null, ascii formating, etc.)
+#
+

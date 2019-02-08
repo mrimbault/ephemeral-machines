@@ -1,0 +1,17 @@
+---
+- name: Add "epel" repository
+  become: true
+  script: scripts/system/add_repo_yum.sh -n "epel-release"
+- name: Install useful utilities
+  become: true
+  script: >
+    scripts/system/install_pkg_yum.sh \
+      "atop" \
+      "perf" \
+      "strace" \
+      "sysstat" \
+      "rsync" \
+      "screen" \
+      "tcpdump" \
+      "vim"
+

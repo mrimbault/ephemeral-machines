@@ -1,0 +1,31 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Simple Debian Stretch machine, one private network in addition to the one
+# automatically built by Vagrant, provisioning for basic system configuration
+# and installation of useful softwares.
+[machines]
+[machines.deb9]
+box              = "debian/stretch64"
+box_check_update = false
+hostname         = "deb9"
+memory           = 1024
+cpus             = 1
+[machines.deb9.private_networks]
+[machines.deb9.private_networks._listitem_122]
+ip_private   = "192.168.122.14"
+resolvname   = "deb9"
+# Vagrant network auto-configure feature.
+auto_config  = true
+local_domain = "vagrant.local"
+# Synced folders.
+[machines.deb9.sync_folders]
+[machines.deb9.sync_folders._listitem_share]
+host  = "share"
+guest = "/share"
+[ansible]
+dir      = "ansible"
+playbook = "simple-playbook.yaml"
+

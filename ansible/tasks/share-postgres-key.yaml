@@ -1,0 +1,41 @@
+---
+- name: Generate ssh keys and get public keys
+  become: true
+  become_user: "postgres"
+  script: scripts/system/gen_ssh_key.sh -p
+  register: ssh_key
+- name: Deploy each key on every other machines
+  become: true
+  become_user: "postgres"
+  script: >
+      scripts/system/add_ssh_key.sh \
+        -k "{{ hostvars[ item ]['ssh_key']['stdout'] }}"
+  # Loop over hosts being configured.
+  loop: "{{ ansible_play_batch }}"
+  # Exclude the host currently being processed.
+  when: item != inventory_hostname
+- name: Add known hosts on every machine
+  become: true
+  become_user: "postgres"
+  script: >
+      scripts/system/add_known_host.sh \
+        -r "{{ item[1].resolvname }}" \
+        -i "{{ item[1].ip_private }}"
+  # Loop explanation:
+  # - ansible_play_batch: list of hosts concerned by this task
+  # - difference(inventory_hostname): substract from this list the host
+  #   currently being processed
+  # - map('extract', hostvars): extract from "hostvars" (that contains all
+  #   variables from all hosts known) the variables specific to selected hosts
+  # - list: transform the output to a list, so it will be usable in a loop
+  # - subelements('private_networks'): find the "private_networks" key and do a
+  #   second loop on the list, related keys and values will be accessible using
+  #   item[1]
+  loop: "{{ ansible_play_batch
+              | difference(inventory_hostname)
+              | map('extract', hostvars)
+              | list
+              | subelements('private_networks') }}"
+  loop_control:
+    label: "{{ item[1].resolvname }} - {{ item[1].ip_private }}"
+

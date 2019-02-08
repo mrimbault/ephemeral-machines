@@ -1,0 +1,29 @@
+---
+# This task list is only executed for "Debian" family machines.
+# Set init_system facts.
+- name: Set systemd facts for Debian Jessie and later.
+  set_fact:
+    init_system: "systemd"
+  when: >
+    ansible_distribution == "Debian" and
+    ansible_distribution_major_version|int >= 8
+- name: Set SysV facts for Debian before Jessie
+  set_fact:
+    init_system: "SysV"
+  when: >
+    ansible_distribution == "Debian" and
+    ansible_distribution_major_version|int <= 7
+- name: Set systemd facts for Ubuntu Xenial and later.
+  set_fact:
+    init_system: "systemd"
+  when: >
+    ansible_distribution == "Ubuntu" and
+    ansible_distribution_major_version|int >= 16
+- name: Set SysV facts for Debian before Xenial
+  set_fact:
+    init_system: "SysV"
+  when: >
+    ansible_distribution == "Ubuntu" and
+    ansible_distribution_major_version|int <= 15
+
+

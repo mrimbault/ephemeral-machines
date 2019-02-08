@@ -1,0 +1,51 @@
+---
+#- name: Create the PGDATA directory
+# FIXME should we allow to create multiple instances?
+# FIXME custom PGDATA not supported yet
+#  become: true
+#  script: >
+#      scripts/system/create_dir.sh \
+#        -P "{{ vars['postgresql']['pgdata'] }}" \
+#        -o "postgres" \
+#        -p "700"
+#  when: vars['postgresql']['pgdata'] is defined
+- name: Update password file for replication user
+# This is required so streaming replication connections work.  We could also
+# have put the password into the recovery.conf file though.  It should be noted
+# that this user is also allowed to login on non-replication sessions, and is
+# used to extract informations from primary useful to build the standby (PGDATA
+# and configuration files locations, etc.).
+  become: true
+  become_user: "postgres"
+  script: >
+      scripts/postgres/build_pgpass.sh \
+        -U "{{ vars['postgresql']['replication']['rolename'] }}" \
+        -P "{{ vars['postgresql']['replication']['password'] }}"
+- name: Initialize the standby instance from the primary
+# FIXME depending on the PostgreSQL version, we may be able to use
+# pg_basebackup or need other methods (pg_start_backup() and rsync), and
+# options may vary.
+# FIXME Why should we have a different version for RedHat and Debian? Just
+# pg_basebackup location?
+  become: true
+  become_user: "postgres"
+  # FIXME using "psql" from the script requires become method to change the
+  # home directory, thus adding "-i" flag
+  become_method: "sudo"
+  become_flags: "-i"
+  script: >
+      scripts/postgres/init_standby_{{ ansible_os_family }}.sh \
+        -v "{{ vars['postgresql']['version'] }}" \
+        -U "{{ vars['postgresql']['replication']['rolename'] }}" \
+        -P "{{ vars['postgresql']['replication']['primary_host'] }}"
+# FIXME For Debian, we need to call "pg_createcluster" AFTER initializing the
+# standby:
+# https://manpages.debian.org/jessie/postgresql-common/pg_createcluster.1.en.html
+- name: Initialize system init files and startup the standby instance
+  become: true
+  script: >
+      scripts/postgres/systeminit_standby_{{ ansible_os_family }}.sh \
+        -v "{{ vars['postgresql']['version'] }}" \
+        -i "{{ vars['init_system'] }}"
+
+

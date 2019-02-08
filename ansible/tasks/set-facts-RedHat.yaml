@@ -1,0 +1,15 @@
+---
+# This task list is only executed for "RedHat" family machines.
+# FIXME what about Fedora/Suse/other "rpm" like distros?
+# Set init_system facts.
+- name: Set systemd facts for RedHat / CentOS 7 and later
+  set_fact:
+    init_system: "systemd"
+  # FIXME should be 7.1+ to be really true
+  when: ansible_distribution_major_version|int >= 7
+# Set init_system facts.
+- name: Set SysV facts for RedHat / CentOS 6 and before
+  set_fact:
+    init_system: "SysV"
+  when: ansible_distribution_major_version|int <= 6
+

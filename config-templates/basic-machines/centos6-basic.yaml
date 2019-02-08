@@ -1,0 +1,21 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Very basic CentOS 6 machine, no provisioning, no networking outside of the
+# one automatically built by Vagrant.
+machines:
+  cos6basic:
+    box:              "centos/6"
+    box_check_update: false
+    hostname:         "cos6basic"
+    memory:           1024
+    cpus:             1
+    # Synced folders.
+    sync_folders:
+      _listitem_share:
+        host:  "share"
+        guest: "/share"
+

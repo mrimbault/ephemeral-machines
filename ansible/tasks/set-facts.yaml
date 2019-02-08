@@ -1,0 +1,18 @@
+---
+# Set specific facts for every virtual machine.
+- name: Set default variables.
+  set_fact:
+      postgres[item] = "default"
+  loop:
+    - "pgdata"
+  when: var["postgres"][item] is not defined
+# Set specific facts for every virtual machine.
+- name: Set default boolean variables.
+  set_fact:
+    postgres:
+      checksums: "false"
+  loop:
+    - "checksums"
+    - "checksums"
+  when: var["postgres"][item] is not defined
+

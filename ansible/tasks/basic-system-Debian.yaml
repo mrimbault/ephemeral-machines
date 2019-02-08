@@ -1,0 +1,36 @@
+---
+# This task loops over the list of all machines currently active on this play,
+# and adds related information on "/etc/hosts" file.
+- name: Configure "/etc/hosts" to add IP and name from every machine.
+  become: true
+  # FIXME "-d local_domain" should be optionnal, only when provided from
+  # configuration
+  script: >
+    scripts/system/set_hosts.sh \
+      -i "{{ item[1].ip_private }}" \
+      -d "{{ item[1].local_domain }}" \
+      -r "{{ item[1].resolvname }}"
+  # Loop explanation:
+  # - ansible_play_batch: list of hosts concerned by this task
+  # - map('extract', hostvars): extract from "hostvars" (that contains all
+  #   variables from all hosts known) the variables specific to selected hosts
+  # - list: transform the output to a list, so it will be usable in a loop
+  # - subelements('private_networks'): find the "private_networks" key and do a
+  #   second loop on the list, related keys and values will be accessible using
+  #   item[1]
+  loop: "{{ ansible_play_batch
+              | map('extract', hostvars)
+              | list
+              | subelements('private_networks') }}"
+  loop_control:
+    label: "{{ item[1].resolvname }} - {{ item[1].ip_private }}"
+- name: Install ntp packages
+  become: true
+  script: scripts/system/install_pkg_apt.sh "ntp"
+- name: Configure timezone
+  become: true
+  script: scripts/system/setup_time_apt.sh -t "Europe/Paris"
+- name: Add ACL support and policy core utils
+  become: true
+  script: scripts/system/install_pkg_apt.sh "acl policycoreutils"
+

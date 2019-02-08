@@ -1,0 +1,6 @@
+---
+# TODO
+# - configure multiple interfaces with bonding and failover (for HA testing)
+# - configure firewalls and selinux?
+# - installs pacemaker, etc.
+

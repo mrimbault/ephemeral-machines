@@ -1,0 +1,76 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Simple Debian Stretch machine, one private network in addition to the one
+# automatically built by Vagrant, provisioning for basic system configuration
+# and installation of useful softwares.
+[machines]
+[machines.deb9pg11]
+box              = "debian/stretch64"
+box_check_update = false
+hostname         = "deb9pg11"
+memory           = 1024
+cpus             = 1
+[machines.deb9pg11.private_networks]
+[machines.deb9pg11.private_networks._listitem_122]
+ip_private   = "192.168.122.22"
+resolvname   = "deb9pg11"
+# Vagrant network auto-configure feature.
+auto_config  = true
+local_domain = "vagrant.local"
+# Forwarded Port.
+[machines.deb9pg11.fw_ports]
+[machines.deb9pg11.fw_ports._listitem_pgport]
+guest = 5432
+host  = 55431
+# PostgreSQL configuration.
+[machines.deb9pg11.postgresql]
+version  = "11"
+repo     = "pgdg"
+repo_url = "http://apt.postgresql.org/pub/repos/apt/"
+repo_key = "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+packages = [
+  "postgresql-11"
+]
+hba_lines = [
+#   TYPE  DATABASE        USER            ADDRESS             METHOD
+  "local   all        postgres                                  peer",
+  "local   all             all                                   md5",
+  "host    all             all       127.0.0.1/32                md5",
+  "host    all             all            ::1/128                md5",
+  "host    all             all   192.168.122.1/32                md5"
+]
+[machines.deb9pg11.postgresql.settings]
+listen_addresses            = "'*'"
+# Logging.
+log_connections             = "'on'"
+log_disconnections          = "'on'"
+log_checkpoints             = "'on'"
+log_lock_waits              = "'on'"
+log_temp_files              = 0
+log_autovacuum_min_duration = 0
+log_line_prefix             = "'%t [%p]: db=%d,user=%u,app=%a,client=%h '"
+lc_messages                 = "'C'"
+# Replication.
+wal_level                   = "'replica'"
+archive_mode                = "'on'"
+archive_command             = "'/bin/true'"
+hot_standby                 = "'on'"
+max_wal_senders             = 10
+max_replication_slots       = 10
+# Synced folders.
+[machines.deb9pg11.sync_folders]
+[machines.deb9pg11.sync_folders._listitem_share]
+host  = "share"
+guest = "/share"
+
+# Ansible provisionning
+[ansible]
+dir      = "ansible"
+playbook = "pg-playbook.yaml"
+[ansible.groups]
+pg = [
+  "deb9pg11"
+]

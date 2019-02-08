@@ -1,0 +1,20 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Very basic Debian Stretch machine, no provisioning, no networking outside of
+# the one automatically built by Vagrant.
+[machines]
+[machines.deb9basic]
+box              = "debian/stretch64"
+box_check_update = false
+hostname         = "deb9basic"
+memory           = 1024
+cpus             = 1
+# Synced folders.
+[machines.deb9basic.sync_folders]
+[machines.deb9basic.sync_folders._listitem_share]
+host  = "share"
+guest = "/share"
+

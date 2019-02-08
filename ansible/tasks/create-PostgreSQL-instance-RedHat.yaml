@@ -1,0 +1,66 @@
+---
+# FIXME should we allow to create multiple instances?
+# FIXME custom PGDATA not supported yet
+#- name: Create the PGDATA directory
+#  become: true
+#  script: >
+#      scripts/system/create_dir.sh \
+#        -P "{{ vars['postgresql']['pgdata'] }}" \
+#        -o "postgres" \
+#        -p "700"
+#  when: vars['postgresql']['pgdata'] is defined
+- name: Initialize the instance
+  become: true
+  script: >
+      scripts/postgres/init_instance_{{ ansible_os_family }}.sh \
+        -v "{{ vars['postgresql']['version'] }}" \
+        -i "{{ vars['init_system'] }}"
+- name: Configure the instance
+  become: true
+  become_user: "postgres"
+  # FIXME using "psql" from the script requires become method to change the
+  # home directory, thus adding "-i" flag
+  become_method: "sudo"
+  become_flags: "-i"
+  script: >
+      scripts/postgres/change_setting.sh \
+        "{{ item.key }}" \
+        "{{ item.value }}"
+  # Loop on all elements from "settings" dictionary.
+  # FIXME the correct and up-to-date syntax should be:
+  #  loop: "{{ vars['postgresql']['settings']|dict2items }}"
+  #  loop_control:
+  #    loop_var: "setting"
+  # But curiously, this does not seem to work with vagrant, I get an error:
+  # "dict2items requires a dictionary, got <class 'ansible.parsing.yaml.objects.AnsibleSequence'> instead."
+  # So I falled back to deprecated syntax "with_dict"
+  with_dict: "{{ vars['postgresql']['settings'] }}"
+- name: Initialize hba file
+  become: true
+  become_user: "postgres"
+  # FIXME using "psql" from the script requires become method to change the
+  # home directory, thus adding "-i" flag
+  become_method: "sudo"
+  become_flags: "-i"
+  script: scripts/postgres/build_hba.sh -i
+- name: Add lines to hba file from host configuration
+  become: true
+  become_user: "postgres"
+  # FIXME using "psql" from the script requires become method to change the
+  # home directory, thus adding "-i" flag
+  become_method: "sudo"
+  become_flags: "-i"
+  script: >
+      scripts/postgres/build_hba.sh \
+        -l "{{ hba_line }}"
+  loop: "{{ vars['postgresql']['hba_lines'] }}"
+  loop_control:
+    loop_var: "hba_line"
+- name: Restart the instance
+  become: true
+  script: >
+      scripts/postgres/manage_instance_{{ ansible_os_family }}.sh \
+        -v "{{ vars['postgresql']['version'] }}" \
+        -a "restart" \
+        -i "{{ vars['init_system'] }}"
+

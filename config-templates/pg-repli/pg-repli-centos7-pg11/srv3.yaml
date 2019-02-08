@@ -1,0 +1,31 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Machines configuration.
+machines:
+  srv3:
+    hostname:        "srv3"
+    # Network.
+    private_networks:
+      _listitem_122:
+        # Static IP address for the machine.
+        ip_private:  "192.168.122.43"
+        resolvname:  "srv3"
+    # Forwarded Port.
+    fw_ports:
+      _listitem_pgport:
+        guest:  5432
+        host:  55433
+    postgresql:
+      hba_lines:
+      # Replication specific lines.
+      # TYPE  DATABASE        USER            ADDRESS             METHOD
+      - "host replication  repliuser  192.168.122.41/32                md5"
+      - "host replication  repliuser  192.168.122.42/32                md5"
+      - "host replication  repliuser  192.168.122.43/32             reject"
+      replication:
+        primary_host: "srv1"
+

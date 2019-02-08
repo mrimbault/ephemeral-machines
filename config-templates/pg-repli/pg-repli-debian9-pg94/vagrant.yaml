@@ -1,0 +1,23 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Files to be included into configuration.
+includes:
+- file: "defaults.yaml"
+- file: "srv1.yaml"
+- file: "srv2.yaml"
+- file: "srv3.yaml"
+# Ansible provisionning
+ansible:
+  dir:               "ansible"
+  playbook:          "pg-repli-playbook.yaml"
+  groups:
+    pgprimary:
+    - "srv1"
+    pgstandby:
+    - "srv2"
+    - "srv3"
+

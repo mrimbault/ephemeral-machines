@@ -1,0 +1,35 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Basic system configuration.
+- hosts: all
+  gather_facts: true
+  tasks:
+  - include_tasks: "tasks/set-facts-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/basic-system-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/advanced-utilities-{{ ansible_os_family }}.yaml"
+
+# Install PostgreSQL and prepare replication.
+- hosts: pgprimary:pgstandby
+  gather_facts: false
+  tasks:
+  - include_tasks: "tasks/install-PostgreSQL-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/share-postgres-key.yaml"
+
+# Create primary instances.
+- hosts: pgprimary
+  gather_facts: false
+  tasks:
+  - include_tasks: "tasks/create-PostgreSQL-instance-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/configure-PostgreSQL-replication-primary.yaml"
+
+# Create standby instances.
+- hosts: pgstandby
+  gather_facts: false
+  tasks:
+  - include_tasks: "tasks/create-PostgreSQL-standby-{{ ansible_os_family }}.yaml"
+
+

@@ -1,0 +1,28 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Files to be included into configuration.
+[[includes]]
+file: "defaults.toml"
+[[includes]]
+file: "srv1.toml"
+[[includes]]
+file: "srv2.toml"
+[[includes]]
+file: "srv3.toml"
+
+# Ansible provisionning
+[ansible]
+dir      = "ansible"
+playbook = "pg-repli-playbook.yaml"
+[ansible.groups]
+pgprimary = [
+  "srv1"
+]
+pgstandby = [
+  "srv2",
+  "srv3"
+]
+

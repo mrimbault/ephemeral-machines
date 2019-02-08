@@ -1,0 +1,32 @@
+---
+# These tasks must be run on an already created PostgreSQL instance, that will
+# become the primary instance for a streaming replication configuration.
+- name: Create replication role
+# This user is primarily used to PostgreSQL streaming replication.  It is also
+# allowed to login on non-replication sessions as a superuser, so it can be
+# used to extract informations from primary useful to build the standby (PGDATA
+# and configuration files locations, etc.).
+# FIXME maybe the two roles should be separated, and the "provision-specific"
+# superuser removed after provisioning?
+  become: true
+  become_user: "postgres"
+  # FIXME using "psql" from the script requires become method to change the
+  # home directory, thus adding "-i" flag to "sudo"
+  become_method: "sudo"
+  become_flags: "-i"
+  script: >
+      scripts/postgres/create_role.sh \
+        -n "{{ vars['postgresql']['replication']['rolename'] }}" \
+        -P "{{ vars['postgresql']['replication']['password'] }}" \
+        -A "REPLICATION LOGIN SUPERUSER"
+- name: Update password file for replication user
+# Executing this task on the primary is not required for the initial
+# replication to work, but very useful in case we intend to test various
+# failover situations.
+  become: true
+  become_user: "postgres"
+  script: >
+      scripts/postgres/build_pgpass.sh \
+        -U "{{ vars['postgresql']['replication']['rolename'] }}" \
+        -P "{{ vars['postgresql']['replication']['password'] }}"
+

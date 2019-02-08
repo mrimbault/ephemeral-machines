@@ -1,0 +1,77 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Machines configuration.
+[machines]
+[machines.cos7pg11]
+box              = "centos/7"
+box_check_update = false
+memory           = 1024
+cpus             = 1
+hostname         = "cos7pg11"
+# Network.
+[machines.cos7pg11.private_networks]
+[machines.cos7pg11.private_networks._listitem_122]
+# Static IP address for the machine.
+ip_private   = "192.168.122.21"
+resolvname   = "cos7pg11"
+# Vagrant network auto-configure feature.
+auto_config  = true
+local_domain = "vagrant.local"
+# Forwarded Port.
+[machines.cos7pg11.fw_ports]
+[machines.cos7pg11.fw_ports._listitem_pgport]
+guest = 5432
+host  = 55431
+# PostgreSQL configuration.
+[machines.cos7pg11.postgresql]
+version  = "11"
+repo_url = "https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-7-x86_64/pgdg-centos11-11-2.noarch.rpm"
+packages = [
+  "postgresql11-server",
+  "postgresql11-contrib"
+]
+hba_lines = [
+#   TYPE  DATABASE        USER            ADDRESS             METHOD
+  "local   all        postgres                                  peer",
+  "local   all             all                                   md5",
+  "host    all             all       127.0.0.1/32                md5",
+  "host    all             all            ::1/128                md5",
+  "host    all             all   192.168.122.1/32                md5",
+]
+[machines.cos7pg11.postgresql.settings]
+listen_addresses            = "'*'"
+# Logging.
+log_connections             = "'on'"
+log_disconnections          = "'on'"
+log_checkpoints             = "'on'"
+log_lock_waits              = "'on'"
+log_temp_files              = 0
+log_autovacuum_min_duration = 0
+log_line_prefix             = "'%t [%p]: db=%d,user=%u,app=%a,client=%h '"
+lc_messages                 = "'C'"
+# Replication.
+wal_level                   = "'replica'"
+archive_mode                = "'on'"
+archive_command             = "'/bin/true'"
+hot_standby                 = "'on'"
+max_wal_senders             = 10
+max_replication_slots       = 10
+# Synced folders.
+[machines.cos7pg11.sync_folders]
+[machines.cos7pg11.sync_folders._listitem_share]
+host  = "share"
+guest = "/share"
+
+# Ansible provisionning
+[ansible]
+dir      = "ansible"
+playbook = "pg-playbook.yaml"
+[ansible.groups]
+pg = [
+  "cos7pg11"
+]
+
+

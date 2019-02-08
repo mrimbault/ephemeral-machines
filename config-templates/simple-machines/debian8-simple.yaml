@@ -1,0 +1,32 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Simple Debian Wheezy machine, one private network in addition to the one
+# automatically built by Vagrant, provisioning for basic system configuration
+# and installation of useful softwares.
+machines:
+  deb8:
+    box:              "debian/jessie64"
+    box_check_update: false
+    hostname:         "deb8"
+    memory:           1024
+    cpus:             1
+    private_networks:
+      _listitem_122:
+        ip_private:  "192.168.122.13"
+        resolvname:  "deb8"
+        # Vagrant network auto-configure feature.
+        auto_config: true
+        local_domain:      "vagrant.local"
+    # Synced folders.
+    sync_folders:
+      _listitem_share:
+        host:  "share"
+        guest: "/share"
+ansible:
+  dir:               "ansible"
+  playbook:          "simple-playbook.yaml"
+

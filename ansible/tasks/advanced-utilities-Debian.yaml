@@ -1,0 +1,13 @@
+---
+- name: Install useful utilities
+  become: true
+  script: >
+    scripts/system/install_pkg_apt.sh \
+      "atop" \
+      "strace" \
+      "sysstat" \
+      "rsync" \
+      "screen" \
+      "tcpdump" \
+      "vim"
+

@@ -1,0 +1,34 @@
+---
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Simple CentOS 6 machine, one private network in addition to the one
+# automatically built by Vagrant, provisioning for basic system configuration
+# and installation of useful softwares.
+machines:
+  cos6:
+    box:              "centos/6"
+    box_check_update: false
+    hostname:         "cos6"
+    memory:           1024
+    cpus:             1
+    private_networks:
+      _listitem_122:
+        ip_private:  "192.168.122.11"
+        resolvname:  "cos6"
+        # Vagrant network auto-configure feature.
+        auto_config: true
+        local_domain:      "vagrant.local"
+    # Synced folders.
+    sync_folders:
+      _listitem_share:
+        host:  "share"
+        guest: "/share"
+ansible:
+  dir:               "ansible"
+  playbook:          "simple-playbook.yaml"
+
+
+
