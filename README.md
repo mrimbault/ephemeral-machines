@@ -138,11 +138,9 @@ using the `manage.sh` script.  Then, you can create a new `vagrant.yaml`
 configuration file at the root of this directory.  The configuration files use
 [YAML syntax](https://yaml.org/).  Sadly, this syntax is not very user
 friendly, specifically regarding indentation, so always double-check your
-syntax.  I thought about using [TOML syntax](https://github.com/toml-lang/toml)
-instead, but as most Ansible configurations files and playboooks use YAML, for
-starters I decided to kept things consistent.  I'm still considering it though,
-especially now that the Vagrantfile generates all of Ansible hosts
-configuration (but not playbooks).
+syntax.  [TOML syntax](https://github.com/toml-lang/toml) is also supported,
+but the toml-rb parser must be installed as a vagrant plugin.  The parser to
+use is determined from the configuration file extention (`.yaml` or `.toml`).
 
 The configuration file is separated in the following sections (root keys in the
 `machines` dictionnary).
@@ -337,21 +335,21 @@ supports the following parameters:
 #### Machines provisioning settings
 
 Depending on the playbook used, any number of additional parameters may be
-used.  Before launching Ansible, Vagrant writes every machine's configuration
-(FIXME link) into the [host_vars
+used.  Before launching Ansible, Vagrant writes [every machine's
+configuration](#machines) into the [host_vars
 directory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#splitting-out-host-and-group-specific-data).
 This way, any setting defined into a machine's dictionary key will be available
 from the playbook.
 
-Also see the description of the playbooks templates and the supported settings
-(FIXME internal link).
+Also see the [description of the playbooks templates and the supported
+settings](#ansible-template-playbooks).
 
 #### Example
 
 This creates two machines, and for each on it installs PostgreSQL 11, and
 creates and starts a PostgreSQL instance (note: for this to work, the
-`ansible/playbook.yaml` file must have been created, for example using an
-existing template (FIXME internal link)):
+`ansible/playbook.yaml` file must have been created, for example using [an
+existing template](#ansible-template-playbooks):
 ~~~yaml
 ---
 defaults:
@@ -484,7 +482,7 @@ The template playbook `ansible/playbook-templates/simple-playbook.yaml` is
 designed to provision simple Linux machines, with several added useful
 softwares.  The supported options to add to the machine definition are:
 - `private_networks`: See [the description on the Vagrant configuration
-  section](FIXME).  These parameters are used to configure local name
+  section](#machines-configuration).  These parameters are used to configure local name
   resolution (`/etc/hosts`).  Specifically, the ones used by the playbook are:
   - `ip_private`: Adresse IP privée pour cette règle de résolution.
   - `resolvname`: Nom qui va résoudre sur l'adresse IP privée spécifiée pour
@@ -505,10 +503,13 @@ definition are:
   - `repo`: PostgreSQL repository name to be added.
   - `repo_url`: PostgreSQL repository full URL to be added.
   - `packages`: List of PostgreSQL packages to be installed from the repository.
-  - `settings`: Dictionary of [PostgreSQL settings](FIXME link) to be modified, specified as
-    keys and values (for example, `  listen_addresses: "'*'"`).
+  - `settings`: Dictionary of [PostgreSQL
+    settings](https://www.postgresql.org/docs/current/runtime-config.html) to
+    be modified, specified as keys and values (for example, `
+    listen_addresses: "'*'"`).
   - `hba_lines`: List of lines to be added to the PostgreSQL [authentication
-    file](FIXME link), specified as strings (for exemple,
+    file](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html),
+    specified as strings (for exemple,
     `  - "local   all  postgres                                  peer"`).
 
 The supported Ansible group is:
@@ -536,7 +537,7 @@ The supported Ansible groups are:
 
 ### PostgreSQL with replication and automatic failover
 
-FIXME
+FIXME not supported yet, WIP
 
 The template playbook `ansible/playbook-templates/pg-repli-paf-playbook.yaml` is
 designed to provision Linux machines with PostgreSQL installed and an instance

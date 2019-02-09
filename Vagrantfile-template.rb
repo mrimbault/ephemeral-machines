@@ -1,6 +1,28 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
+# MIT License
+#
+# Copyright (c) 2019 Mael Rimbault
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
 # This Vagrantfile comes from "ephemeral-machines" project:
 # https://github.com/mrimbault/ephemeral-machines/
 #
@@ -10,11 +32,12 @@
 # providers).
 #
 # Use YAML syntax for configuration files, and for Ansible hosts variables
-# files generation.
+# files generation.  Note that TOML configuration syntax is also supported, if
+# the parser is installed.
 require "yaml"
 
 # ephemeral-machines version.
-EM_VERSION = "0.1"
+EM_VERSION = "0.2-beta"
 
 # Initialize variables.
 config_file = String.new
@@ -126,14 +149,18 @@ class ::Hash
     end
 end
 
+# Get main configuration file name.
 if ENV.key?("EM_VAGRANT_CONF")
     config_file = ENV["EM_VAGRANT_CONF"]
+    # If EM_VAGRANT_CONF environment variable is set, use that.
     if ! File.file?(env_config_file)
         die("Configuration file #{config_file} specified in EM_VAGRANT_CONF environament variable does not exist, aborting.")
     end
 elsif File.file?("vagrant.toml")
+    # Then, use vagrant.toml if it exists.
     config_file = "vagrant.toml"
 elsif File.file?("vagrant.yaml")
+    # Last, try for vagrant.yaml.
     config_file = "vagrant.yaml"
 else
     die("No configuration file found on current directory, aborting.")
@@ -144,9 +171,7 @@ config_file_ext = config_file[/.*\.([^\.]*)/,1]
 
 # Read current project configuration file, based on its extension.
 if config_file_ext == "toml"
-    # FIXME change to TOML configuration syntax for configuration files?
-    # see: https://github.com/toml-lang/toml
-    # TOML parser must be installed.
+    # TOML parser must be installed in that case.
     require "toml-rb"
     conf = TomlRB.load_file(config_file) ||
         die("Loading configuration file #{config_file} failed, aborting.")
