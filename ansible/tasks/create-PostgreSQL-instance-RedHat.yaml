@@ -27,7 +27,6 @@
         "{{ item.key }}" \
         "{{ item.value }}"
   # Loop on all elements from "settings" dictionary.
-  with_dict: "{{ vars['postgresql']['settings'] }}"
   loop: "{{ vars['postgresql']['settings']|dict2items }}"
 - name: Initialize hba file
   become: true
