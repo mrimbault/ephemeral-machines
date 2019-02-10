@@ -28,15 +28,7 @@
         "{{ item.key }}" \
         "{{ item.value }}"
   # Loop on all elements from "settings" dictionary.
-  # FIXME the correct and up-to-date syntax should be:
-  #  loop: "{{ vars['postgresql']['settings']|dict2items }}"
-  #  loop_control:
-  #    loop_var: "setting"
-  # But curiously, this does not seem to work with vagrant, I get an error:
-  # "dict2items requires a dictionary, got <class 'ansible.parsing.yaml.objects.AnsibleSequence'> instead."
-  # So I falled back to deprecated syntax "with_dict"
-  # FIXME maybe the settings should instead be configured as a list?
-  with_dict: "{{ vars['postgresql']['settings'] }}"
+  loop: "{{ vars['postgresql']['settings']|dict2items }}"
 - name: Initialize hba file
   become: true
   become_user: "postgres"
