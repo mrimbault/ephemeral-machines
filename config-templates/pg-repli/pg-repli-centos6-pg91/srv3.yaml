@@ -1,0 +1,19 @@
+---
+machines:
+  srv3:
+    hostname: srv3
+    private_networks:
+      _listitem_122:
+        ip_private: 192.168.122.46
+        resolvname: srv3
+    fw_ports:
+      _listitem_pgport:
+        guest: 5432
+        host: 55433
+    postgresql:
+      hba_lines:
+      - host replication  repliuser  192.168.122.44/32                md5
+      - host replication  repliuser  192.168.122.45/32                md5
+      - host replication  repliuser  192.168.122.46/32             reject
+      replication:
+        primary_host: srv1

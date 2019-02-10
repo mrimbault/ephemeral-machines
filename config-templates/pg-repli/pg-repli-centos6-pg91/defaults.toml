@@ -1,0 +1,67 @@
+# This file is a template.  Copy it to another location to use it.  Do not
+# modify its content, the modifications would be lost when upgrading the
+# project.
+#
+
+# Configuration shared between machines.
+[defaults]
+box              = "centos/6"
+box_check_update = false
+memory           = 1024
+cpus             = 1
+
+# Network.
+[defaults.private_networks]
+[defaults.private_networks._listitem_122]
+# Vagrant network auto-configure feature.
+auto_config  = true
+local_domain = "vagrant.local"
+
+# PostgreSQL configuration.
+[defaults.postgresql]
+version  = "9.1"
+repo_url = "https://download.postgresql.org/pub/repos/yum/9.1/redhat/rhel-latest-x86_64/pgdg-centos91-9.1-7.noarch.rpm"
+packages = [
+  "postgresql91-server",
+  "postgresql91-contrib"
+]
+hba_lines = [
+# Replication specific lines are added from every machine
+# configuration file.
+#   TYPE  DATABASE        USER            ADDRESS             METHOD
+  "local   all        postgres                                  peer",
+  "local   all             all                                   md5",
+  "host    all             all       127.0.0.1/32                md5",
+  "host    all             all            ::1/128                md5",
+  "host    all             all   192.168.122.1/32                md5",
+  "host    all             all  192.168.122.41/32                md5",
+  "host    all             all  192.168.122.42/32                md5",
+  "host    all             all  192.168.122.43/32                md5"
+]
+[defaults.postgresql.settings]
+listen_addresses            = "'*'"
+# Logging.
+log_connections             = "'on'"
+log_disconnections          = "'on'"
+log_checkpoints             = "'on'"
+log_lock_waits              = "'on'"
+log_temp_files              = 0
+log_autovacuum_min_duration = 0
+log_line_prefix             = "'%t [%p]: db=%d,user=%u,app=%a,client=%h '"
+lc_messages                 = "'C'"
+# Replication.
+wal_level                   = "'hot_standby'"
+archive_mode                = "'on'"
+archive_command             = "'/bin/true'"
+hot_standby                 = "'on'"
+max_wal_senders             = 10
+[defaults.postgresql.replication]
+rolename = "repliuser"
+password = "xev8ER7cec"
+
+# Synced folders.
+[defaults.sync_folders]
+[defaults.sync_folders._listitem_share]
+host  = "share"
+guest = "/share"
+

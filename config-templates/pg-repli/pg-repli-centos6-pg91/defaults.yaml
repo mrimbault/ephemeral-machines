@@ -1,0 +1,47 @@
+---
+defaults:
+  box: centos/6
+  box_check_update: false
+  memory: 1024
+  cpus: 1
+  private_networks:
+    _listitem_122:
+      auto_config: true
+      local_domain: vagrant.local
+  postgresql:
+    version: '9.1'
+    repo_url: https://download.postgresql.org/pub/repos/yum/9.1/redhat/rhel-latest-x86_64/pgdg-centos91-9.1-7.noarch.rpm
+    packages:
+    - postgresql91-server
+    - postgresql91-contrib
+    hba_lines:
+    - local   all        postgres                                  peer
+    - local   all             all                                   md5
+    - host    all             all       127.0.0.1/32                md5
+    - host    all             all            ::1/128                md5
+    - host    all             all   192.168.122.1/32                md5
+    - host    all             all  192.168.122.41/32                md5
+    - host    all             all  192.168.122.42/32                md5
+    - host    all             all  192.168.122.43/32                md5
+    settings:
+      listen_addresses: "'*'"
+      log_connections: "'on'"
+      log_disconnections: "'on'"
+      log_checkpoints: "'on'"
+      log_lock_waits: "'on'"
+      log_temp_files: 0
+      log_autovacuum_min_duration: 0
+      log_line_prefix: "'%t [%p]: db=%d,user=%u,app=%a,client=%h '"
+      lc_messages: "'C'"
+      wal_level: "'hot_standby'"
+      archive_mode: "'on'"
+      archive_command: "'/bin/true'"
+      hot_standby: "'on'"
+      max_wal_senders: 10
+    replication:
+      rolename: repliuser
+      password: xev8ER7cec
+  sync_folders:
+    _listitem_share:
+      host: share
+      guest: "/share"

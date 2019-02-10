@@ -37,7 +37,7 @@
 require "yaml"
 
 # ephemeral-machines version.
-EM_VERSION = "0.2-beta"
+EM_VERSION = "0.2-dev"
 
 # Initialize variables.
 config_file = String.new
