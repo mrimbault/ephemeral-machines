@@ -1,9 +1,9 @@
 ---
 includes:
-- file: defaults.toml
-- file: srv1.toml
-- file: srv2.toml
-- file: srv3.toml
+- defaults.toml
+- srv1.toml
+- srv2.toml
+- srv3.toml
 ansible:
   dir: ansible
   playbook: pg-repli-playbook.yaml

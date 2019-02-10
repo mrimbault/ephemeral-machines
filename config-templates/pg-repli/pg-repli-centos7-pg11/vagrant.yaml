@@ -6,10 +6,10 @@
 
 # Files to be included into configuration.
 includes:
-- file: "defaults.yaml"
-- file: "srv1.yaml"
-- file: "srv2.yaml"
-- file: "srv3.yaml"
+- "defaults.yaml"
+- "srv1.yaml"
+- "srv2.yaml"
+- "srv3.yaml"
 # Ansible provisionning
 ansible:
   dir:               "ansible"

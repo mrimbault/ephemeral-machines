@@ -191,13 +191,13 @@ if ( conf.key?("includes") && !conf["includes"].nil? )
     conf["includes"].each do |include_file|
         # Read ncluded configuration file, based on chosen extension.
         if config_file_ext == "toml"
-            included_conf = TomlRB.load_file(include_file["file"]) ||
-                die("Loading configuration file #{include_file["file"]} failed, aborting.")
+            included_conf = TomlRB.load_file(include_file) ||
+                die("Loading configuration file #{include_file} failed, aborting.")
         elsif config_file_ext == "yaml"
-            included_conf = YAML.load_file(include_file["file"]) ||
-                die("Loading configuration file #{include_file["file"]} failed, aborting.")
+            included_conf = YAML.load_file(include_file) ||
+                die("Loading configuration file #{include_file} failed, aborting.")
         else
-            die("File extention not supported for file #{include_file["file"]}, aborting.")
+            die("File extention not supported for file #{include_file}, aborting.")
         end
         # Merge hash keys from include file into the main "conf" hash.
         conf = conf.deep_merge(included_conf)

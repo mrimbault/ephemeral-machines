@@ -4,14 +4,12 @@
 #
 
 # Files to be included into configuration.
-[[includes]]
-file: "defaults.toml"
-[[includes]]
-file: "srv1.toml"
-[[includes]]
-file: "srv2.toml"
-[[includes]]
-file: "srv3.toml"
+includes = [
+  "defaults.toml",
+  "srv1.toml",
+  "srv2.toml",
+  "srv3.toml"
+]
 
 # Ansible provisionning
 [ansible]
