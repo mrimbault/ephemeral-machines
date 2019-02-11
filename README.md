@@ -23,14 +23,15 @@ the next step is to change directory to the newly created:
 cd ~/ephemeral-machines/myfirstconfiguration/
 ~~~
 
-Then create the `vagrant.yaml` file, and optionnaly `ansible/playbook.yaml`
-file.  You can use the templates provided into `config-templates` and
-`ansible/playbook-templates` directories.  Editing the local Vagrantfile or any
-other file should not be necessary.
+Then create the `vagrant.yaml` (or `vagrant.toml` if you prefer TOML syntax)
+file, and optionnaly `ansible/playbook.yaml` file.  You can use the templates
+provided into `config-templates` and `ansible/playbook-templates` directories.
+Editing the local Vagrantfile or any other file should not be necessary.
 
-Finally, the following command will create the machines described on the
-`vagrant.yaml` configuration, optionnally launch the provisioning using the
-specified Ansbile playbook file, and start the machines.
+Finally, the following command will download the required box images if not
+already present, create the machines described on the configuration, start
+them, and optionnally launch the provisioning using the specified Ansible
+playbook file:
 ~~~
 vagrant up
 ~~~
@@ -103,10 +104,11 @@ manage.sh <ACTION> <OPTIONS>
 ~~~
 manage.sh init <OPTIONS>
   MANDATORY OPTIONS:
-    -n <project_name>  Name of the configuration, used to name the final directory
+    -n <configuration_name>  Name of the configuration, used to name the final
+                             directory
   OPTIONAL OPTIONS:
-    -d <global_dir>    Main directory used for the configuration
-    -e                 Erase configuration directory if it already exists
+    -d <global_dir>    Main directory used for the configurations
+    -f                 Erase configuration directory if it already exists
     -h                 Print this help
 ~~~
 
@@ -114,10 +116,11 @@ manage.sh init <OPTIONS>
 ~~~
 manage.sh upgrade <OPTIONS>
   MANDATORY OPTIONS (mutually exclusives):
-    -n <project_name>  Name of the configuration to be upgraded
-    -A                 Upgrade all configurations into the main directory
+    -n <configuration_name>  Name of the configuration to be upgraded
+    -A                       Upgrade all configurations into the main directory
   OPTIONAL OPTIONS:
     -d <global_dir>    Main directory used for the configurations
+    -f                 Force upgrade, even if the version is already installed
     -h                 Print this help
 ~~~
 
