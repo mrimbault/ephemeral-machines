@@ -9,13 +9,6 @@
 #        -o "postgres" \
 #        -p "700"
 #  when: vars['postgresql']['pgdata'] is defined
-# FIXME the default package installation automatically creates an instance
-# already
-#- name: Initialize the instance
-#  become: true
-#  script: >
-#      scripts/postgres/init_instance_{{ ansible_os_family }}.sh \
-#        -v "{{ vars['postgresql']['version'] }}"
 - name: Configure the instance
   become: true
   become_user: "postgres"
@@ -53,8 +46,8 @@
 - name: Restart the instance
   become: true
   script: >
-      scripts/postgres/manage_instance_{{ ansible_os_family }}.sh \
-        -v "{{ vars['postgresql']['version'] }}" \
+      scripts/system/manage_service.sh \
+        -s "postgresql@{{ vars['postgresql']['version'] }}-main" \
         -a "restart" \
         -i "{{ vars['init_system'] }}"
 

@@ -52,8 +52,8 @@
 - name: Restart the instance
   become: true
   script: >
-      scripts/postgres/manage_instance_{{ ansible_os_family }}.sh \
-        -v "{{ vars['postgresql']['version'] }}" \
+      scripts/system/manage_service.sh \
+        -s "postgresql-{{ vars['postgresql']['version'] }}" \
         -a "restart" \
         -i "{{ vars['init_system'] }}"
 

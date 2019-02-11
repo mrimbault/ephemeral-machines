@@ -38,14 +38,20 @@
         -v "{{ vars['postgresql']['version'] }}" \
         -U "{{ vars['postgresql']['replication']['rolename'] }}" \
         -P "{{ vars['postgresql']['replication']['primary_host'] }}"
-# FIXME For Debian, we need to call "pg_createcluster" AFTER initializing the
-# standby:
-# https://manpages.debian.org/jessie/postgresql-common/pg_createcluster.1.en.html
-- name: Initialize system init files and startup the standby instance
+- name: Enable PostgreSQL service
   become: true
   script: >
-      scripts/postgres/systeminit_standby_{{ ansible_os_family }}.sh \
-        -v "{{ vars['postgresql']['version'] }}" \
+      scripts/system/manage_service.sh \
+        -s "postgresql-{{ vars['postgresql']['version'] }}" \
+        -a "enable" \
+        -e "{{ vars['enable_cmd'] }}" \
+        -i "{{ vars['init_system'] }}"
+- name: Startup the standby instance
+  become: true
+  script: >
+      scripts/system/manage_service.sh \
+        -s "postgresql-{{ vars['postgresql']['version'] }}" \
+        -a "start" \
         -i "{{ vars['init_system'] }}"
 
 
