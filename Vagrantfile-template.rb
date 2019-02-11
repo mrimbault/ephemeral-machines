@@ -153,7 +153,7 @@ end
 if ENV.key?("EM_VAGRANT_CONF")
     config_file = ENV["EM_VAGRANT_CONF"]
     # If EM_VAGRANT_CONF environment variable is set, use that.
-    if ! File.file?(env_config_file)
+    if ! File.file?(config_file)
         die("Configuration file #{config_file} specified in EM_VAGRANT_CONF environament variable does not exist, aborting.")
     end
 elsif File.file?("vagrant.toml")
