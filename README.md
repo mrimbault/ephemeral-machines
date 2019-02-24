@@ -25,7 +25,7 @@ cd ~/ephemeral-machines/myfirstconfiguration/
 
 Then create the `vagrant.yaml` (or `vagrant.toml` if you prefer TOML syntax)
 file, and optionnaly `ansible/playbook.yaml` file.  You can use the templates
-provided into `config-templates` and `ansible/playbook-templates` directories.
+provided into `config-templates` and `ansible/` directories.
 Editing the local Vagrantfile or any other file should not be necessary.
 
 Finally, the following command will download the required box images if not
@@ -481,9 +481,9 @@ interruption and data loss.
 
 ### Simple machines
 
-The template playbook `ansible/playbook-templates/simple-playbook.yaml` is
-designed to provision simple Linux machines, with several added useful
-softwares.  The supported options to add to the machine definition are:
+The template playbook `ansible/simple-playbook.yaml` is designed to provision
+simple Linux machines, with several added useful softwares.  The supported
+options to add to the machine definition are:
 - `private_networks`: See [the description on the Vagrant configuration
   section](#machines-configuration).  These parameters are used to configure local name
   resolution (`/etc/hosts`).  Specifically, the ones used by the playbook are:
@@ -496,10 +496,9 @@ softwares.  The supported options to add to the machine definition are:
 
 ### PostgreSQL
 
-The template playbook `ansible/playbook-templates/pg-playbook.yaml` is
-designed to provision Linux machines with PostgreSQL installed and an instance
-created, configured and started.  The supported options to add to the machine
-definition are:
+The template playbook `ansible/pg-playbook.yaml` is designed to provision Linux
+machines with PostgreSQL installed and an instance created, configured and
+started.  The supported options to add to the machine definition are:
 - The options supported by `simple-playbook.yaml`.
 - `postgresql`: Main dictionary key for specifying PostgreSQL configuration.
   - `version`: PostgreSQL major version number (ie 9.4, 11) to be installed.
@@ -521,11 +520,11 @@ The supported Ansible group is:
 
 ### PostgreSQL with replication
 
-The template playbook `ansible/playbook-templates/pg-repli-playbook.yaml` is
-designed to provision Linux machines with PostgreSQL installed and an instance
-created, configured and started, and others with a standby PostgreSQL instances
-created and connected to the primary using streaming replication.  The
-supported options to add to the machine definition are:
+The template playbook `ansible/pg-repli-playbook.yaml` is designed to provision
+Linux machines with PostgreSQL installed and an instance created, configured
+and started, and others with a standby PostgreSQL instances created and
+connected to the primary using streaming replication.  The supported options to
+add to the machine definition are:
 - The options supported by the `simple-playbook.yaml`.
 - The options supported by the `pg-playbook.yaml`.
 - `postgresql`
@@ -542,11 +541,11 @@ The supported Ansible groups are:
 
 FIXME not supported yet, WIP
 
-The template playbook `ansible/playbook-templates/pg-repli-paf-playbook.yaml` is
-designed to provision Linux machines with PostgreSQL installed and an instance
-created, configured and started, and others with a standby PostgreSQL instances
-created and connected to the primary using streaming replication.  The
-supported options to add to the machine definition are:
+The template playbook `ansible/pg-repli-paf-playbook.yaml` is designed to
+provision Linux machines with PostgreSQL installed and an instance created,
+configured and started, and others with a standby PostgreSQL instances created
+and connected to the primary using streaming replication.  The supported
+options to add to the machine definition are:
 - FIXME specific, custom package list?
 - FIXME postgres
 - FIXME postgres replication

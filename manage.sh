@@ -167,7 +167,6 @@ initialize() {
     mkdir "${ansible_dir}/group_vars"
 
     # Copy playbooks, scripts and tasks templates.
-    cp -r "${source_dir}/ansible/playbook-templates" "${ansible_dir}"
     cp -r "${source_dir}/ansible/scripts" "${ansible_dir}"
     cp -r "${source_dir}/ansible/tasks" "${ansible_dir}"
 
@@ -178,7 +177,7 @@ initialize() {
     echo "Edit \"${configuration_dir}/vagrant.yaml\" file to define the boxes to be created."
     echo "You can use one template from \"${configuration_dir}/config-templates/\"."
     echo "You may also want to define one playbook into \"${ansible_dir}/\"."
-    echo "Several templates are provided in \"${configuration_dir}/ansible/playbook-templates/\"."
+    echo "Several templates are provided in \"${configuration_dir}/ansible/\"."
     echo "Then run: \"cd ${configuration_dir} && vagrant up\""
     echo
 
@@ -244,7 +243,7 @@ upgrade() {
         # Upgrade configuration templates.
         rsync -r "$templates_dir" "${configuration_dir}/config-templates"
         # Upgrade playbooks, scripts and tasks templates.
-        rsync -r "${source_dir}/ansible/playbook-templates" "${ansible_dir}"
+        rsync "${source_dir}/ansible/*-playbook.yaml" "${ansible_dir}"
         rsync -r "${source_dir}/ansible/scripts" "${ansible_dir}"
         rsync -r "${source_dir}/ansible/tasks" "${ansible_dir}"
         echo "Project ${configuration_name} upgraded to version \"$upgraded_version\"."
@@ -273,7 +272,7 @@ upgrade() {
             # Upgrade configuration templates.
             rsync -r "$templates_dir" "${configuration_dir}/config-templates"
             # Upgrade playbooks, scripts and tasks templates.
-            rsync -r "${source_dir}/ansible/playbook-templates" "${ansible_dir}"
+            rsync "${source_dir}/ansible/*playbook.yaml" "${ansible_dir}"
             rsync -r "${source_dir}/ansible/scripts" "${ansible_dir}"
             rsync -r "${source_dir}/ansible/tasks" "${ansible_dir}"
             echo "Project ${configuration_name} upgraded to version \"$upgraded_version\"."
