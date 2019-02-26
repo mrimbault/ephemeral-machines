@@ -40,7 +40,7 @@ print_usage() {
 }
 
 # Get script arguments.
-while getopts 'n:U' flag; do
+while getopts 'n:' flag; do
   case "${flag}" in
     n) repo_name="${OPTARG}" ;;
     *) print_usage
@@ -59,6 +59,7 @@ if [ -z "$repo_name" ]; then
     die 'Option -n is required.'
 fi
 
+# FIXME add a joker to the repo package name so we can get the last version
 # Add repository.
 yum -y install "$repo_name"
 
