@@ -161,14 +161,8 @@ initialize() {
     # Get the project template configuration files.
     cp -r "$templates_dir" "${configuration_dir}/config-templates"
 
-    # Create ansible directories.
-    mkdir "$ansible_dir"
-    mkdir "${ansible_dir}/host_vars"
-    mkdir "${ansible_dir}/group_vars"
-
-    # Copy playbooks, scripts and tasks templates.
-    cp -r "${source_dir}/ansible/scripts" "${ansible_dir}"
-    cp -r "${source_dir}/ansible/tasks" "${ansible_dir}"
+    # Copy Ansible playbooks, scripts and tasks templates.
+    cp -r "${source_dir}/ansible/" "${ansible_dir}"
 
 
     echo "==========================="
@@ -243,9 +237,7 @@ upgrade() {
         # Upgrade configuration templates.
         rsync -r "$templates_dir" "${configuration_dir}/config-templates"
         # Upgrade playbooks, scripts and tasks templates.
-        rsync "${source_dir}/ansible/*-playbook.yaml" "${ansible_dir}"
-        rsync -r "${source_dir}/ansible/scripts" "${ansible_dir}"
-        rsync -r "${source_dir}/ansible/tasks" "${ansible_dir}"
+        rsync -r "${source_dir}/ansible/" "${ansible_dir}"
         echo "Project ${configuration_name} upgraded to version \"$upgraded_version\"."
 
     else
@@ -272,9 +264,7 @@ upgrade() {
             # Upgrade configuration templates.
             rsync -r "$templates_dir" "${configuration_dir}/config-templates"
             # Upgrade playbooks, scripts and tasks templates.
-            rsync "${source_dir}/ansible/*playbook.yaml" "${ansible_dir}"
-            rsync -r "${source_dir}/ansible/scripts" "${ansible_dir}"
-            rsync -r "${source_dir}/ansible/tasks" "${ansible_dir}"
+            rsync -r "${source_dir}/ansible/" "${ansible_dir}"
             echo "Project ${configuration_name} upgraded to version \"$upgraded_version\"."
         done < <(find "${global_dir}" -maxdepth 2 -name "Vagrantfile" -print0)
     fi
