@@ -163,6 +163,8 @@ initialize() {
 
     # Copy Ansible playbooks, scripts and tasks templates.
     cp -r "${source_dir}/ansible/" "${ansible_dir}"
+    mkdir "${ansible_dir}/host_vars/"
+    mkdir "${ansible_dir}/group_vars/"
 
 
     echo "==========================="
