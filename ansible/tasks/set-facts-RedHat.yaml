@@ -4,12 +4,16 @@
 # Set init_system facts.
 - name: Set systemd facts for RedHat / CentOS 7 and later
   set_fact:
-    init_system: "systemd"
+    init_system:     "systemd"
+    firewall_system: "firewalld"
+    enable_cmd:      "systemctl"
   # FIXME should be 7.1+ to be really true
   when: ansible_distribution_major_version|int >= 7
 # Set init_system facts.
 - name: Set SysV facts for RedHat / CentOS 6 and before
   set_fact:
-    init_system: "SysV"
+    init_system:     "SysV"
+    firewall_system: "iptables"
+    enable_cmd:      "chkconfig"
   when: ansible_distribution_major_version|int <= 6
 

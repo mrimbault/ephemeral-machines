@@ -1,0 +1,27 @@
+---
+# This file is a template.  Do not modify its content, the modifications would
+# be lost when upgrading the project.  If you need to change it, copy it to
+# another location.
+#
+
+# Basic system configuration.
+- hosts: all
+  gather_facts: true
+  tasks:
+  - include_tasks: "tasks/set-facts-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/basic-system-{{ ansible_os_family }}.yaml"
+  - include_tasks: "tasks/advanced-utilities-{{ ansible_os_family }}.yaml"
+
+# NFS server
+- hosts: nfsserver
+  gather_facts: false
+  tasks:
+  - include_tasks: "tasks/setup-nfs-server-{{ ansible_os_family }}.yaml"
+
+# NFS clients
+- hosts: nfsclient
+  gather_facts: false
+  tasks:
+  - include_tasks: "tasks/setup-nfs-client-{{ ansible_os_family }}.yaml"
+
+

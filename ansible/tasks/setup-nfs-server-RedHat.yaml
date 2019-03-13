@@ -1,0 +1,20 @@
+---
+- name: Install NFS
+  become: true
+  script: scripts/system/install_pkg_yum.sh "nfs-utils"
+- name: Start NFS service
+  become: true
+  script: >
+      scripts/system/manage_service.sh \
+        -s "{{ vars['nfs_service'] }}" \
+        -a "start" \
+        -i "{{ vars['init_system'] }}"
+- name: Enable NFS service
+  become: true
+  script: >
+      scripts/system/manage_service.sh \
+        -s "{{ vars['nfs_service'] }}" \
+        -a "enable" \
+        -i "{{ vars['init_system'] }}" \
+        -e "{{ vars['enable_cmd'] }}"
+

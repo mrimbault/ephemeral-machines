@@ -9,5 +9,6 @@
       "rsync" \
       "screen" \
       "tcpdump" \
+      "wget" \
       "vim"
 

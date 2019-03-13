@@ -1,5 +1,10 @@
 ---
 # This task list is only executed for "Debian" family machines.
+# FIXME Is iptables available for all Debian-like systems?  When is the switch
+# to nftables?  Should we systematically install a specific CLI?
+- name: Set firewall facts
+  set_fact:
+    firewall_system: "iptables"
 # Set init_system facts.
 - name: Set systemd facts for Debian Jessie and later.
   set_fact:

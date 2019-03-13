@@ -1,0 +1,5 @@
+---
+- name: Install NFS client
+  become: true
+  script: scripts/system/install_pkg_apt.sh "nfs-common"
+

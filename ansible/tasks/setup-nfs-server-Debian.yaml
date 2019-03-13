@@ -1,0 +1,19 @@
+---
+- name: Install NFS server
+  become: true
+  script: scripts/system/install_pkg_apt.sh "nfs-kernel-server" "nfs-common"
+- name: Start NFS service
+  become: true
+  script: >
+      scripts/system/manage_service.sh \
+        -s "nfs-kernel-server" \
+        -a "start" \
+        -i "{{ vars['init_system'] }}"
+- name: Enable NFS service
+  become: true
+  script: >
+      scripts/system/manage_service.sh \
+        -s "nfs-kernel-server" \
+        -a "enable" \
+        -i "{{ vars['init_system'] }}"
+

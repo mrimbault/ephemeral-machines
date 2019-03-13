@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-#
+#------------------------------------------------------------------------------
 # MIT License
 #
 # Copyright (c) 2019 Mael Rimbault
@@ -22,7 +22,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
+#------------------------------------------------------------------------------
 # This Vagrantfile comes from "ephemeral-machines" project:
 # https://github.com/mrimbault/ephemeral-machines/
 #
