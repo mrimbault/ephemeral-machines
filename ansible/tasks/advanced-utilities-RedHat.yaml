@@ -9,6 +9,7 @@
       "atop" \
       "perf" \
       "strace" \
+      "lsof" \
       "sysstat" \
       "rsync" \
       "screen" \

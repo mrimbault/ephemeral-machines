@@ -5,6 +5,7 @@
     scripts/system/install_pkg_apt.sh \
       "atop" \
       "strace" \
+      "lsof" \
       "sysstat" \
       "rsync" \
       "screen" \
